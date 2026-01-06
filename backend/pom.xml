@@ -32,21 +32,18 @@
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+
+		<!-- Spring MVC + Jackson -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!-- REMOVE DATABASE FOR NOW -->
+		<!-- (we intentionally do NOT add JPA or JDBC here) -->
+
 	</dependencies>
+
 
 	<build>
 		<plugins>
