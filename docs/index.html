@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AI Business Intelligence Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen flex items-center justify-center">
+
+<div class="bg-white shadow-xl rounded-xl p-8 w-full max-w-xl">
+    <h1 class="text-2xl font-bold text-slate-800 mb-2">
+        AI-Powered Business Intelligence
+    </h1>
+    <p class="text-slate-500 mb-6">
+        Enter a business update to receive AI-driven insights and recommendations.
+    </p>
+
+    <textarea
+            id="inputText"
+            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="4"
+            placeholder="e.g. Sales dropped by 10% in Q3"
+    ></textarea>
+
+    <button
+            onclick="analyze()"
+            class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
+    >
+        Analyze
+    </button>
+
+    <!-- Loading -->
+    <p id="loading" class="text-blue-600 mt-4 hidden">
+        Analyzing business data...
+    </p>
+
+    <!-- Error -->
+    <p id="error" class="text-red-600 mt-4 hidden"></p>
+
+    <!-- Output -->
+    <div id="result" class="mt-6 hidden">
+        <div class="mb-4">
+            <h3 class="font-semibold text-slate-700">Insight</h3>
+            <p id="insight" class="text-slate-600"></p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-slate-700">Recommendation</h3>
+            <p id="recommendation" class="text-slate-600"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function analyze() {
+        const text = document.getElementById("inputText").value;
+        const loading = document.getElementById("loading");
+        const error = document.getElementById("error");
+        const result = document.getElementById("result");
+
+        error.classList.add("hidden");
+        result.classList.add("hidden");
+
+        if (!text.trim()) {
+            error.innerText = "Please enter a business statement.";
+            error.classList.remove("hidden");
+            return;
+        }
+
+        loading.classList.remove("hidden");
+
+        fetch("http://localhost:8080/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text })
+        })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.add("hidden");
+                result.classList.remove("hidden");
+
+                document.getElementById("insight").innerText = data.insight;
+                document.getElementById("recommendation").innerText = data.recommendation;
+            })
+            .catch(err => {
+                loading.classList.add("hidden");
+                error.innerText = "Unable to connect to backend service.";
+                error.classList.remove("hidden");
+            });
+    }
+</script>
+
+</body>
+</html>
